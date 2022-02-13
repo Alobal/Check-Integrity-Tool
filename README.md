@@ -31,3 +31,17 @@
 ```shell
 python CheckIntegrity.py [-d='path/to/your/dir'] [--hash=MD5] [-cx/-c] 
 ```
+
+# 效果截图
+
+生成校验文件，并显示完整目录树
+
+![生成](./生成.png)
+
+检查目录
+
+![检查](./检查.png)
+
+强化检查目录
+
+![强化检查](./强化检查.png)
