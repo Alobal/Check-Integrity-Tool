@@ -1,3 +1,4 @@
+from ast import arg
 from importlib import import_module
 from Cryptodome.PublicKey import RSA
 from Cryptodome.Signature import PKCS1_v1_5
@@ -309,6 +310,7 @@ def parse_args():
     parser.add_argument('-d','--dir',default="./",help='指定目录',type=str)
     parser.add_argument('--hash',default="MD5",help='指定Hash方法 支持HMAC, MD2, MD4, MD5, RIPEMD160, SHA1,SHA224, SHA256, SHA384, SHA512, CMAC, Poly1305,cSHAKE128, cSHAKE256, KMAC128, KMAC256,TupleHash128, TupleHash256, KangarooTwelve',type=str)
     parser.add_argument('-c','--check',default=False,help='是否进行验证',action='store_true')
+    parser.add_argument('-f','--file',help='指定文件,仅对该文件进行Hash计算')
     parser.add_argument('-cx','--checkplus',default=False,help='是否进行文件树验证',action='store_true')
     parser.add_argument('-g','--generateKey',default=False,help='进行签名秘钥生成',action='store_true')
 
@@ -322,7 +324,10 @@ if __name__== '__main__':
     #指定目录
     path=args.dir
 
-    if  args.checkplus:
+    if args.file:
+        print(Hash_File(args.file,hash_method).value.hex())
+
+    elif  args.checkplus:
         tree=Check_Tree(path,hash_method)
         error_msg=str(tree.check_status).replace("CHECK_STATUS.",'')
         print("检查结果：",error_msg)
