@@ -2,12 +2,10 @@ from ast import arg
 from importlib import import_module
 from Cryptodome.PublicKey import RSA
 from Cryptodome.Signature import PKCS1_v1_5
-from Cryptodome.Hash import MD5
 from pathlib import Path
 import os
 import sys
 import pickle #序列化保存
-import hashlib
 import argparse
 import enum
 
@@ -237,6 +235,7 @@ def Check_Tree(root,hash_method,save_tree=None)-> Node:
                 save_tree=pickle.load(f)
         else:
             print("找不到.tree文件，树检查失败")
+            save_tree=Node("")
             save_tree.check_status=CHECK_STATUS.MISSING_FILE
             return save_tree
 
