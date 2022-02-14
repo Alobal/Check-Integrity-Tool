@@ -21,9 +21,9 @@
 ## Usage 使用方法
 
 - ```-h, --help```         show this help message and exit
-- ```-d DIR, --dir DIR```  指定目录
-- ```--hash HASH```        指定Hash方法 支持HMAC, MD2, MD4, MD5, RIPEMD160, SHA1,SHA224, SHA256, SHA384, SHA512, CMAC,
-                     Poly1305,cSHAKE128, cSHAKE256, KMAC128, KMAC256,TupleHash128, TupleHash256, KangarooTwelve
+- ```-d DIR, --dir DIR```  指定目录，默认"./"
+- ```--hash HASH```        指定Hash方法，默认MD5， 支持HMAC, MD2, MD4, MD5, RIPEMD160, SHA1,SHA224, SHA256, SHA384, SHA512, CMAC,
+                           Poly1305,cSHAKE128, cSHAKE256, KMAC128, KMAC256,TupleHash128, TupleHash256, KangarooTwelve
 - ```-c, --check```        是否进行验证
 - ```-cx, --checkplus```   是否进行文件树验证
 - ```-g, --generateKey```  进行签名秘钥生成
