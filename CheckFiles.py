@@ -1,4 +1,3 @@
-from ast import arg
 from importlib import import_module
 from Cryptodome.PublicKey import RSA
 from Cryptodome.Signature import PKCS1_v1_5
@@ -73,7 +72,7 @@ class Node:
                 if len(child.child_list)>0:#如果存在子节点，递归显示
                     child.ShowTree(padding+'│',only_error)
                 else:#不存在子节点则直接显示文件
-                    error_msg=f"""[{str(self.check_status).replace("CHECK_STATUS.",'')}]"""
+                    error_msg=f"""[{str(child.check_status).replace("CHECK_STATUS.",'')}]"""
                     print(child.name+"   "+error_msg)
 
 
@@ -112,7 +111,7 @@ def Hash_Dir(root,hash_method,sign=False,exclude_files=EXCLUDE_FILES,flash=True)
     """
     计算一个目录的Hash值，并且构造Hash树
 
-    hash不能通过默认值方式传递，否则会所有函数使用同一个hash对象
+    hash_method不能通过默认值方式传递func类型，否则会所有函数使用同一个hash对象
 
     sign=True则此目录hash值使用RSA进行数字签名再保存
     """
@@ -246,7 +245,6 @@ def Check_Tree(root,hash_method,save_tree=None)-> Node:
         if os.path.isfile(file_path):
             if Hash_File(file_path,hash_method).value!=child.value:
                 child.SetCheckStatus(CHECK_STATUS.ERROR)
-                save_tree.SetCheckStatus(CHECK_STATUS.ERROR)
         #是一个目录
         elif os.path.isdir(file_path):
             child.SetCheckStatus(Check_Tree(file_path,hash_method,child).check_status)
