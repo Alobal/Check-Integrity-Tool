@@ -122,11 +122,12 @@ def Hash_Dir(root,hash_method,sign=False,exclude_files=EXCLUDE_FILES,flash=True)
 
     #递归获得所有当前目录下的文件夹的Hash值
     for dir in dir_names:
-        dir_path=os.path.join(root_path,dir)
-        dir_node=Hash_Dir(dir_path,hash_method)
-        #添加子节点
-        root_node.AddChild(dir_node)
-        hash.update(dir_node.value)
+        if dir not in exclude_files:
+            dir_path=os.path.join(root_path,dir)
+            dir_node=Hash_Dir(dir_path,hash_method)
+            #添加子节点
+            root_node.AddChild(dir_node)
+            hash.update(dir_node.value)
 
     #获得所有当前目录文件的Hash值
     for file in file_names:
@@ -170,10 +171,11 @@ def Check_Dir(root,hash_method,sign=False,exclude_files=EXCLUDE_FILES):
 
     #递归检查所有当前目录子目录的hash
     for dir in dir_names:
-        dir_path=os.path.join(root_path,dir)
-        dir=Check_Dir(dir_path,hash_method)
-        root_node.AddChild(dir)
-        hash.update(dir.value)
+        if dir not in exclude_files:
+            dir_path=os.path.join(root_path,dir)
+            dir=Check_Dir(dir_path,hash_method)
+            root_node.AddChild(dir)
+            hash.update(dir.value)
 
         if dir.check_status>CHECK_STATUS.SUCCESS:#如果子目录有错误，则继承错误状态
             root_node.SetCheckStatus(dir.check_status)
@@ -310,7 +312,8 @@ def parse_args():
     parser.add_argument('-f','--file',help='指定文件,仅对该文件进行Hash计算')
     parser.add_argument('-cx','--checkplus',default=False,help='是否进行文件树验证',action='store_true')
     parser.add_argument('-g','--generateKey',default=False,help='进行签名秘钥生成',action='store_true')
-
+    parser.add_argument('--nocache',default=True,help='启用则不刷新hash存储文件',action='store_false')
+    parser.add_argument('-ex','--exclude',default=None,nargs='+',help='排除检查文件列表 -ex file1 file2 ...')
     return parser.parse_args()
 
 
@@ -320,6 +323,8 @@ if __name__== '__main__':
     hash_method=import_module("Cryptodome.Hash."+args.hash)
     #指定目录
     path=args.dir
+    EXCLUDE_FILES=EXCLUDE_FILES+args.exclude
+    print(EXCLUDE_FILES)
 
     if args.file:
         print(Hash_File(args.file,hash_method).value.hex())
@@ -336,7 +341,7 @@ if __name__== '__main__':
         print("检查结果：",error_msg)
         tree.ShowTree(only_error=True)
     else:
-        tree=Hash_Dir(path,hash_method,sign=True,flash=True)
+        tree=Hash_Dir(path,hash_method,sign=True,flash=args.nocache)
         print("树顶点:",end='')
         print(tree)
         print("完整树结构如下：")
