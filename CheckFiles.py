@@ -59,7 +59,6 @@ class Node:
         #打印子树结构
         padding+=" " *(GetShowLen(self.name))
         for child in self.child_list:
-
             if not only_error:#显示完整结构
                 print(padding,end='├')
                 if len(child.child_list)>0:#如果存在子节点，递归显示
@@ -313,7 +312,7 @@ def parse_args():
     parser.add_argument('-cx','--checkplus',default=False,help='是否进行文件树验证',action='store_true')
     parser.add_argument('-g','--generateKey',default=False,help='进行签名秘钥生成',action='store_true')
     parser.add_argument('--nocache',default=True,help='启用则不刷新hash存储文件',action='store_false')
-    parser.add_argument('-ex','--exclude',default=None,nargs='+',help='排除检查文件列表 -ex file1 file2 ...')
+    parser.add_argument('-ex','--exclude',default=[],nargs='+',help='排除检查文件列表 -ex file1 file2 ...')
     return parser.parse_args()
 
 
